@@ -1,11 +1,6 @@
 const c = document.getElementById("myCanvas");
-if (window.innerWidth < 1000 || window.innerHeight < 800) {
-  c.width = 1000;
-  c.height = 800;
-} else {
-  c.width = window.innerWidth;
-  c.height = window.innerHeight;
-}
+c.width = window.innerWidth;
+c.height = window.innerHeight;
 let canvasHeight = c.height;
 let canvasWidth = c.width;
 const ctx = c.getContext("2d");
@@ -18,8 +13,9 @@ let ground_x = 100;
 let ground_y = 0.78 * canvasHeight;
 let ground_height = 5;
 let brickArray = [];
-let preX = [];
-let preY = [];
+// let preX = [];
+// let preY = [];
+let bricks = [];
 let count = 0;
 
 c.addEventListener("mousemove", (e) => {
@@ -72,29 +68,50 @@ class Brick {
 }
 
 //如果内存溢出就是这里for的问题
+// for (let i = 0; i < 10; i++) {
+//   let x = Math.round(Math.random() * (canvasWidth - 50));
+//   if (preX.length > 0) {
+//     for (let j = 0; j < preX.length; j++) {
+//       if (Math.abs(x - preX[j]) < 50) {
+//         x = Math.round(Math.random() * (canvasWidth - 50));
+//         j = -1;
+//       }
+//     }
+//   }
+//   preX.push(x);
+//   let y = Math.round(Math.random() * (canvasHeight - 50));
+//   if (preY.length > 0) {
+//     for (let j = 0; j < preY.length; j++) {
+//       if (Math.abs(y - preY[j]) < 50) {
+//         y = Math.round(Math.random() * (canvasHeight - 50));
+//         j = -1;
+//       }
+//     }
+//   }
+//   preY.push(y);
+//   console.log(x, y);
+//   new Brick(x, y);
+// }
 for (let i = 0; i < 10; i++) {
-  let x = Math.round(Math.random() * (canvasWidth - 50));
-  if (preX.length > 0) {
-    for (let j = 0; j < preX.length; j++) {
-      if (Math.abs(x - preX[j]) < 50) {
-        x = Math.round(Math.random() * (canvasWidth - 50));
-        j = -1;
+  let x, y;
+  let ok = false;
+
+  while (!ok) {
+    x = Math.random() * (canvasWidth - 50);
+    y = Math.random() * (canvasHeight - 50);
+
+    ok = true;
+
+    for (let b of bricks) {
+      if (Math.abs(x - b.x) < 60 && Math.abs(y - b.y) < 60) {
+        ok = false;
+        break;
       }
     }
   }
-  preX.push(x);
-  let y = Math.round(Math.random() * (canvasHeight - 50));
-  if (preY.length > 0) {
-    for (let j = 0; j < preY.length; j++) {
-      if (Math.abs(y - preY[j]) < 50) {
-        y = Math.round(Math.random() * (canvasHeight - 50));
-        j = -1;
-      }
-    }
-  }
-  preY.push(y);
-  console.log(x, y);
-  new Brick(x, y);
+
+  let brick = new Brick(x, y);
+  bricks.push(brick);
 }
 
 function draw() {
