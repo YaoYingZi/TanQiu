@@ -8,6 +8,8 @@ let circle_x = 160;
 let circle_y = 60;
 let xSpeed = 20;
 let ySpeed = 20;
+let xDirection = 1;
+let yDirection = 1;
 let radius = 20;
 let ground_x = 100;
 let ground_y = 0.78 * canvasHeight;
@@ -17,6 +19,44 @@ let brickArray = [];
 // let preY = [];
 let bricks = [];
 let count = 0;
+
+document.getElementById("speed").addEventListener("input", (e) => {
+  if (Number(e.target.value) > 20) {
+    e.target.value = 20;
+  } else if (Number(e.target.value) < 0) {
+    e.target.value = 0;
+  } else {
+    e.target.value = Math.round(e.target.value);
+  }
+  if (Number(e.target.value) === 0) {
+    if (xSpeed > 0) {
+      xDirection = 1;
+    } else {
+      xDirection = -1;
+    }
+    if (ySpeed > 0) {
+      yDirection = 1;
+    } else {
+      yDirection = -1;
+    }
+    xSpeed = 0;
+    ySpeed = 0;
+  }
+  if (xSpeed > 0) {
+    xSpeed = Number(e.target.value);
+  } else if (xSpeed < 0) {
+    xSpeed = -Number(e.target.value);
+  } else {
+    xSpeed = xDirection * Number(e.target.value);
+  }
+  if (ySpeed > 0) {
+    ySpeed = Number(e.target.value);
+  } else if (ySpeed < 0) {
+    ySpeed = -Number(e.target.value);
+  } else {
+    ySpeed = yDirection * Number(e.target.value);
+  }
+});
 
 c.addEventListener("mousemove", (e) => {
   if (e.clientX >= canvasWidth - 200) {
@@ -67,7 +107,7 @@ class Brick {
   }
 }
 
-//如果内存溢出就是这里for的问题
+// 如果内存溢出就是这里for的问题;
 // for (let i = 0; i < 10; i++) {
 //   let x = Math.round(Math.random() * (canvasWidth - 50));
 //   if (preX.length > 0) {
@@ -92,6 +132,7 @@ class Brick {
 //   console.log(x, y);
 //   new Brick(x, y);
 // }
+
 for (let i = 0; i < 10; i++) {
   let x, y;
   let ok = false;
